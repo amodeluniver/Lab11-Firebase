@@ -40,8 +40,13 @@ fun SettingsScreen(
   openScreen: (String) -> Unit,
   viewModel: SettingsViewModel = hiltViewModel()
 ) {
+  // CORRECCIÓN: Recolectar el estado del ViewModel usando delegación por propiedad (by)
+  val uiState by viewModel.uiState.collectAsState(
+    initial = SettingsUiState(isAnonymousAccount = false)
+  )
+
   SettingsScreenContent(
-    uiState = viewModel.uiState,
+    uiState = uiState, // Ahora pasamos el uiState recolectado de forma reactiva
     onLoginClick = { viewModel.onLoginClick(openScreen) },
     onSignUpClick = { viewModel.onSignUpClick(openScreen) },
     onSignOutClick = { viewModel.onSignOutClick(restartApp) },
